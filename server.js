@@ -1,7 +1,9 @@
+// server.js
 
 const express = require('express');
-const mongoose = require('mongoose');
 const dotenv = require('dotenv');
+const connectDB = require('./config/db'); // Importer la configuration de la base de données
+const authRoutes = require('./routes/auth'); // Importer les routes d'authentification
 
 dotenv.config();
 
@@ -9,9 +11,9 @@ const app = express();
 
 app.use(express.json());
 
-mongoose.connect(process.env.MONGODB_URI)
-    .then(() => console.log('MongoDB connected'))
-    .catch(err => console.error('MongoDB connection error:', err));
+connectDB();
+
+app.use('/api/auth', authRoutes);
 
 const PORT = process.env.PORT || 3000;
 
