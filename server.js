@@ -2,8 +2,10 @@
 
 const express = require('express');
 const dotenv = require('dotenv');
-const connectDB = require('./config/db'); // Importer la configuration de la base de données
-const authRoutes = require('./routes/auth'); // Importer les routes d'authentification
+const connectDB = require('./config/db'); 
+const authRoutes = require('./routes/auth'); 
+const filmRoutes = require('./routes/filmRoutes');
+
 
 dotenv.config();
 
@@ -14,6 +16,8 @@ app.use(express.json());
 connectDB();
 
 app.use('/api/auth', authRoutes);
+app.use('/api/films', filmRoutes);
+
 
 const PORT = process.env.PORT || 3000;
 
