@@ -4,7 +4,7 @@ const connectDB = require('./config/db');
 const authRoutes = require('./routes/auth');
 const filmRoutes = require('./routes/filmRoutes');
 const salleRoutes = require('./routes/salleRoutes');
-
+const seanceRoutes = require('./routes/seanceRoutes');
 const verifyToken = require('./middleware/verifyToken');
 const verifyAdmin = require('./middleware/authorizeAdmin'); 
 
@@ -19,6 +19,8 @@ connectDB();
 app.use('/api/auth', authRoutes);
 app.use('/api/films', verifyToken, verifyAdmin, filmRoutes);
 app.use('/api/salles', verifyToken, verifyAdmin, salleRoutes);
+app.use('/api/seances', verifyToken, verifyAdmin, seanceRoutes);
+
 
 app.use((err, req, res, next) => {
     console.error(err.stack);
