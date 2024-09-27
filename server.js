@@ -6,6 +6,7 @@ const filmRoutes = require('./routes/filmRoutes');
 const salleRoutes = require('./routes/salleRoutes');
 const seanceRoutes = require('./routes/seanceRoutes');
 const reservationRoutes = require('./routes/reservationRoutes');
+const adminRoutes = require('./routes/adminRoutes');
 const verifyToken = require('./middleware/verifyToken');
 const verifyAdmin = require('./middleware/authorizeAdmin'); 
 
@@ -24,6 +25,7 @@ app.use('/api/films', verifyToken, verifyAdmin, filmRoutes);
 app.use('/api/salles', verifyToken, verifyAdmin, salleRoutes);
 app.use('/api/seances', verifyToken, verifyAdmin, seanceRoutes);
 app.use('/api/reservations', verifyToken, reservationRoutes);
+app.use('/api/admin', adminRoutes);
 
 
 
