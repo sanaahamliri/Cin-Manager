@@ -14,13 +14,12 @@ const createSeance = async (req, res) => {
 
 const getAllSeances = async (req, res) => {
     try {
-        const seances = await seanceService.getAllSeances().populate('film').populate('salle');
+        const seances = await seanceService.getAllSeances();
         res.json(seances);
     } catch (error) {
         res.status(500).json({ message: 'Error fetching seances', error });
     }
 };
-
 const getSeanceById = async (req, res) => {
     try {
         const seance = await seanceService.getSeanceById(req.params.id).populate('film').populate('salle');

@@ -6,7 +6,7 @@ const createSeance = async (seanceData) => {
 };
 
 const getAllSeances = async () => {
-    return await Seance.find().populate('film salle');
+    return await Seance.find().populate('film').populate('salle');
 };
 
 const getSeanceById = async (id) => {
