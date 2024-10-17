@@ -1,5 +1,6 @@
 const Film = require('../models/Film');
 const { upload } = require('../config/minioClient');
+const Comment = require('../models/comment');
 
 const createFilm = async (filmData, coverImageFile, videoFile) => {
     const coverImageUrl = await upload(coverImageFile);  
@@ -30,11 +31,21 @@ const deleteFilm = async (id) => {
 };
 
 const getAllFilms = async () => {
-    return await Film.find();
+    const films = await Film.find();
+    const filmsWithComments = await Promise.all(films.map(async (film) => {
+        const comments = await Comment.find({ filmId: film._id }).populate('userId', 'username');
+        return { ...film.toObject(), comments };
+    }));
+    return filmsWithComments;
 };
 
 const getFilmById = async (id) => {
-    return await Film.findById(id);
+    const film = await Film.findById(id);
+    if (!film) {
+        throw new Error('Film not found');
+    }
+    const comments = await Comment.find({ filmId: film._id }).populate('userId', 'username');
+    return { ...film.toObject(), comments };
 };
 
 module.exports = {

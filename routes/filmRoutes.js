@@ -15,5 +15,8 @@ router.delete('/:id', verifyToken, authorizeAdmin, filmController.deleteFilm);
 router.get('/', filmController.getAllFilms);
 
 router.get('/:id', filmController.getFilmById);
+router.post('/:filmId/comments', filmController.addComment); 
+router.get('/:filmId/comments', filmController.getCommentsByFilmId);
+
 
 module.exports = router;

@@ -1,28 +1,37 @@
 const filmService = require('../services/filmService');
+const commentService = require('../services/commentService');
 const Film = require('../models/Film');
+
+const addComment = async (req, res) => {
+    const { filmId } = req.params; 
+    const { text } = req.body;
+    try {
+        const userId = req.user.id;
+        const newComment = await commentService.addComment(filmId, userId, text);
+        return res.status(201).json({ message: 'Comment added successfully', comment: newComment });
+    } catch (error) {
+        return res.status(500).json({ error: 'Error adding comment', details: error.message });
+    }
+};
+
+const getCommentsByFilmId = async (req, res) => {
+    const { filmId } = req.params;
+
+    try {
+        const comments = await commentService.getCommentsByFilmId(filmId);
+        return res.status(200).json(comments);
+    } catch (error) {
+        return res.status(500).json({ error: 'Error retrieving comments', details: error.message });
+    }
+};
+
 const createFilm = async (req, res) => {
     try {
-        let coverImageUrl = null;
-        let videoUrl = null;
+        const coverImageFile = req.files.coverImage ? req.files.coverImage[0] : null;
+        const videoFile = req.files.video ? req.files.video[0] : null;
 
-        if (req.file) {
-            const uploadedUrl = await upload(req.file); 
-            coverImageUrl = uploadedUrl;
-        }
-
-        const newFilm = new Film({
-            title: req.body.title,
-            director: req.body.director,
-            genre: req.body.genre,
-            releaseDate: req.body.releaseDate,
-            duration: req.body.duration,
-            description: req.body.description,
-            coverImage: coverImageUrl || req.body.coverImage, 
-            video: videoUrl || req.body.video 
-        });
-
-        const savedFilm = await newFilm.save();
-        res.status(201).json(savedFilm);
+        const newFilm = await filmService.createFilm(req.body, coverImageFile, videoFile);
+        res.status(201).json(newFilm);
     } catch (error) {
         console.error('Error creating film:', error.message);
         res.status(500).json({ error: 'Error creating film', details: error.message });
@@ -62,9 +71,6 @@ const getAllFilms = async (req, res) => {
 const getFilmById = async (req, res) => {
     try {
         const film = await filmService.getFilmById(req.params.id);
-        if (!film) {
-            return res.status(404).json({ message: 'Film not found' });
-        }
         res.json(film);
     } catch (error) {
         res.status(500).json({ message: 'Error fetching film', error });
@@ -76,5 +82,7 @@ module.exports = {
     updateFilm,
     deleteFilm,
     getAllFilms,
-    getFilmById
+    getFilmById,
+    addComment,
+    getCommentsByFilmId,
 };
