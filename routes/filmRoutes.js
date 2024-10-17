@@ -17,6 +17,7 @@ router.get('/', filmController.getAllFilms);
 router.get('/:id', filmController.getFilmById);
 router.post('/:filmId/comments', filmController.addComment); 
 router.get('/:filmId/comments', filmController.getCommentsByFilmId);
+router.post('/:filmId/rate', filmController.rateFilm);
 
 
 module.exports = router;

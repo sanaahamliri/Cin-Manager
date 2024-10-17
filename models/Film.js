@@ -8,7 +8,9 @@ const filmSchema = new mongoose.Schema({
     duration: { type: Number },
     description: { type: String },
     coverImage: { type: String },
-    video: { type: String }
+    video: { type: String },
+    rating: { type: Number, default: 0 },
+    ratingCount: { type: Number, default: 0 }
 });
 
 module.exports = mongoose.model('Film', filmSchema);

@@ -1,6 +1,8 @@
 const filmService = require('../services/filmService');
 const commentService = require('../services/commentService');
+const rateService = require('../services/rateService');
 const Film = require('../models/Film');
+
 
 const addComment = async (req, res) => {
     const { filmId } = req.params; 
@@ -77,6 +79,28 @@ const getFilmById = async (req, res) => {
     }
 };
 
+const rateFilm = async (req, res) => {
+    const { filmId } = req.params;
+    const { rating } = req.body;
+
+    if (!rating) {
+        return res.status(400).json({ message: 'Rating is required' });
+    }
+
+    try {
+        const film = await Film.findById(filmId);
+        if (!film) {
+            return res.status(404).json({ message: 'Film not found' });
+        }
+
+
+        return res.status(200).json({ message: 'Film rated successfully', film });
+    } catch (error) {
+        console.error('Error rating film:', error);
+        return res.status(500).json({ message: 'Error rating film', error });
+    }
+};
+
 module.exports = {
     createFilm,
     updateFilm,
@@ -85,4 +109,5 @@ module.exports = {
     getFilmById,
     addComment,
     getCommentsByFilmId,
+    rateFilm,
 };
