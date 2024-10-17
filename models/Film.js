@@ -6,7 +6,9 @@ const filmSchema = new mongoose.Schema({
     genre: { type: String },
     releaseDate: { type: Date },
     duration: { type: Number },
-    description: { type: String }
+    description: { type: String },
+    coverImage: { type: String },
+    video: { type: String }
 });
 
 module.exports = mongoose.model('Film', filmSchema);
