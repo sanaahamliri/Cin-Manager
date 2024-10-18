@@ -20,4 +20,9 @@ router.get('/:filmId/comments', filmController.getCommentsByFilmId);
 router.post('/:filmId/rate', filmController.rateFilm);
 
 
+router.post('/:filmId/favorite', verifyToken, filmController.addFavorite);
+router.delete('/:filmId/favorite', verifyToken, filmController.removeFavorite);
+router.get('/favorites', verifyToken, filmController.getFavorites);
+
+
 module.exports = router;

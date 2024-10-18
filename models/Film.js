@@ -10,7 +10,8 @@ const filmSchema = new mongoose.Schema({
     coverImage: { type: String },
     video: { type: String },
     rating: { type: Number, default: 0 },
-    ratingCount: { type: Number, default: 0 }
+    ratingCount: { type: Number, default: 0 },
+    favorites: [{ type: mongoose.Schema.Types.ObjectId, ref: 'Film' }]
 });
 
 module.exports = mongoose.model('Film', filmSchema);

@@ -1,11 +1,11 @@
 const filmService = require('../services/filmService');
 const commentService = require('../services/commentService');
 const rateService = require('../services/rateService');
+const favoriteService = require('../services/favoriteService');
 const Film = require('../models/Film');
 
-
 const addComment = async (req, res) => {
-    const { filmId } = req.params; 
+    const { filmId } = req.params;
     const { text } = req.body;
     try {
         const userId = req.user.id;
@@ -18,7 +18,6 @@ const addComment = async (req, res) => {
 
 const getCommentsByFilmId = async (req, res) => {
     const { filmId } = req.params;
-
     try {
         const comments = await commentService.getCommentsByFilmId(filmId);
         return res.status(200).json(comments);
@@ -31,7 +30,6 @@ const createFilm = async (req, res) => {
     try {
         const coverImageFile = req.files.coverImage ? req.files.coverImage[0] : null;
         const videoFile = req.files.video ? req.files.video[0] : null;
-
         const newFilm = await filmService.createFilm(req.body, coverImageFile, videoFile);
         res.status(201).json(newFilm);
     } catch (error) {
@@ -44,7 +42,6 @@ const updateFilm = async (req, res) => {
     try {
         const coverImageFile = req.files.coverImage ? req.files.coverImage[0] : null;
         const videoFile = req.files.video ? req.files.video[0] : null;
-
         const film = await filmService.updateFilm(req.params.id, req.body, coverImageFile, videoFile);
         res.json({ message: 'Film updated successfully', film });
     } catch (error) {
@@ -101,6 +98,38 @@ const rateFilm = async (req, res) => {
     }
 };
 
+const addFavorite = async (req, res) => {
+    try {
+        const userId = req.user.id;
+        const filmId = req.params.filmId;
+        const favorites = await favoriteService.addFavoriteFilm(userId, filmId);
+        return res.status(200).json({ message: 'Film added to favorites', favorites });
+    } catch (error) {
+        return res.status(500).json({ error: 'Error adding film to favorites', details: error.message });
+    }
+};
+
+const removeFavorite = async (req, res) => {
+    try {
+        const userId = req.user.id;
+        const filmId = req.params.filmId;
+        const favorites = await favoriteService.removeFavoriteFilm(userId, filmId);
+        return res.status(200).json({ message: 'Film removed from favorites', favorites });
+    } catch (error) {
+        return res.status(500).json({ error: 'Error removing film from favorites', details: error.message });
+    }
+};
+
+const getFavorites = async (req, res) => {
+    try {
+        const userId = req.user.id;
+        const favorites = await favoriteService.getFavoriteFilms(userId);
+        return res.status(200).json(favorites);
+    } catch (error) {
+        return res.status(500).json({ error: 'Error fetching favorite films', details: error.message });
+    }
+};
+
 module.exports = {
     createFilm,
     updateFilm,
@@ -110,4 +139,7 @@ module.exports = {
     addComment,
     getCommentsByFilmId,
     rateFilm,
+    addFavorite,
+    removeFavorite,
+    getFavorites
 };
