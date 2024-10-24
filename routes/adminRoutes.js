@@ -12,4 +12,6 @@ router.put('/:id', verifyToken, verifyAdmin, adminController.updateAdmin);
 
 router.delete('/:id', verifyToken, verifyAdmin, adminController.deleteAdmin);
 
+router.get('/statistics',adminController.getAdminStatistics);
+
 module.exports = router;

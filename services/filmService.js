@@ -6,11 +6,13 @@ const createFilm = async (filmData, coverImageFile, videoFile) => {
     const coverImageUrl = await upload(coverImageFile);  
     const videoUrl = await upload(videoFile);            
 
+
     const newFilm = new Film({
         ...filmData,
         coverImage: coverImageUrl,
         video: videoUrl
     });
+console.log(newFilm);
 
     return await newFilm.save();
 };

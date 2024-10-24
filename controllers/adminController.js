@@ -1,4 +1,7 @@
 const adminService = require('../services/adminService');
+const User = require('../models/User');
+const Film = require('../models/Film');
+const Reservation = require('../models/Reservation');
 
 const createAdmin = async (req, res) => {
     try {
@@ -45,9 +48,27 @@ const deleteAdmin = async (req, res) => {
     }
 };
 
+ const getAdminStatistics = async (req, res) => {
+    try {
+      const totalUsers = await User.countDocuments();
+      const totalFilms = await Film.countDocuments();
+      const totalReservations = await Reservation.countDocuments();
+  
+      res.status(200).json({
+        totalUsers,
+        totalFilms,
+        totalReservations
+      });
+    } catch (error) {
+      console.error("Erreur lors de la récupération des statistiques :", error);
+      res.status(500).json({ error: "Impossible de récupérer les statistiques." });
+    }
+  };
+
 module.exports = {
     createAdmin,
     getAllAdmins,
     updateAdmin,
-    deleteAdmin
+    deleteAdmin,
+    getAdminStatistics
 };
